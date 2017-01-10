@@ -1,19 +1,20 @@
-#include <iostream>
-#include <string>
-using namespace std;
-
-
 #ifndef __CAireJeux_h__
 #define __CAireJeux_h__
-#define base1  1
-#define base2  2
+
+#include <iostream>
+#include <string>
+
+#define JOUEUR1 1
+#define JOUEUR2 2
+
+using namespace std;
+class Unite;
 
 class CAireJeux{
 
 
 	int m_tailleT;// taille du terrain
-	int* m_t;// ce poiteur sera un tableau qui ne contiendra que des 3 et des 2  afin de garder en mémoir la présance d'unité sur le terrai
-
+	int* m_t;// ce poiteur sera un tableau qui ne contiendra que des 3 et des 2  afin de garder en mémoir la présance d'unité sur le terrain
 
 	public:
 	CAireJeux();
@@ -24,17 +25,10 @@ class CAireJeux{
 	 l'indice doit etre compris dans [1 ; m_taille] */
 	void modifieCase(int index, int occupant);
 
-
-
-
-
-
-
-
-
-
+    Unite& getUniteAt(int position) const;//return l'unité à la position de l'aire de jeu
 
 
 };
+
 
 #endif
