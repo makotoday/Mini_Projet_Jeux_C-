@@ -6,7 +6,7 @@ using namespace std;
 int Catapulte::prixUnite = 20;
 int Catapulte::porteeMin = 2;
 
-Catapulte::Catapulte(CJoueur& jr,int pos) :Unite(jr,pos)
+Catapulte::Catapulte(CJoueur& jr) :Unite(jr)
 {
     points_de_vie = 10;
     point_dAttaque = 3;
@@ -24,13 +24,18 @@ void Catapulte::print() const
     Unite::print();
 }
 
-void Catapulte::action(int numAction, Unite& ennemiProche)
+void Catapulte::action(int numAction, CAireJeux& aireJeu)
 {
     switch(numAction)
     {
-        case 0 : {action3possible = !attaquer(ennemiProche);break;}
+        case 0 : {
+                    Unite* ennemiProche = trouveEnnemiProche(aireJeu);
+                    if(ennemiProche !=NULL)
+                     action3possible = attaquer(*ennemiProche);//verifie si il est à portée puis attaque
+                     break;
+                }
         case 1 : return;// l'action 2 n'existe pas pour la catapulte
-        case 2 : {if(action3possible) avancer();break;}
+        case 2 : {if(action3possible) avancer(aireJeu);break;}
         default : throw string("action inconnue pour la catapulte");
     }
 }
@@ -42,8 +47,35 @@ bool Catapulte::attaquer(Unite& ennemiProche) const
     {
         ennemiProche.setpoints_de_vie(ennemiProche.getpoints_de_vie()-point_dAttaque);
         if(ennemiProche.getpoints_de_vie()<=0) ennemiProche.setMort();
-        return true;
+        return true;//attaque reussie
     }
-    else return false;
+    else return false;//attaque impossible
 }
 
+ Unite* Catapulte::trouveEnnemiProche(CAireJeux& aireJeu)
+{
+     if(sonJoueur.getNumeroJoueur()==JOUEUR1)
+     {
+        for(int i = position+2;i <11;i++)
+        {
+            if(aireJeu.getOccupation(i)==JOUEUR2)
+            {
+                return &(aireJeu.getUniteAt(i));
+            }
+        }
+        action3possible = true; //pas d'ennemi sur le plateau donc la catapulte avance
+        return NULL;
+    }
+    else
+    {
+        for(int i = position-2;i >0;i--)
+        {
+            if(aireJeu.getOccupation(i)==JOUEUR1)
+            {
+                return &(aireJeu.getUniteAt(i));
+            }
+        }
+        action3possible = true;
+        return NULL;
+    }
+}

@@ -7,7 +7,7 @@ using namespace std;
 int Fantassin::prixUnite = 10;
 
 
-Fantassin::Fantassin(CJoueur& jr,int pos) : Unite(jr,pos)
+Fantassin::Fantassin(CJoueur& jr) : Unite(jr)
 {
     points_de_vie = 10;
     point_dAttaque = 4;
@@ -25,13 +25,19 @@ void Fantassin::print() const
     Unite::print();
 }
 
-void Fantassin::action(int numAction, Unite& ennemiProche)
+
+void Fantassin::action(int numAction, CAireJeux& aireJeu)
 {
     switch(numAction)
     {
-        case 0 : {action3possible = !attaquer(ennemiProche);break;}
-        case 1 : avancer();break;
-        case 2 : {if(action3possible) attaquer(ennemiProche);break;}
+        case 0 : {
+                Unite* ennemiProche = trouveEnnemiProche(aireJeu);
+                if(ennemiProche !=NULL)
+            action3possible = !attaquer(*ennemiProche);break;}
+        case 1 : avancer(aireJeu);break;
+        case 2 : {
+            Unite* ennemiProche = trouveEnnemiProche(aireJeu);
+            if(action3possible&&ennemiProche!=NULL) attaquer(*ennemiProche);break;}
         default : throw string("action inconnue pour le fantassin");
     }
 }
@@ -46,3 +52,30 @@ bool Fantassin::attaquer(Unite& ennemiProche) const
     }else return false;
 }
 
+Unite* Fantassin::trouveEnnemiProche(CAireJeux& aireJeu)
+{
+    if(sonJoueur.getNumeroJoueur()==JOUEUR1)
+    {
+        for(int i = position+1;i <11;i++)
+        {
+            if(aireJeu.getOccupation(i)==JOUEUR2)
+            {
+                return &(aireJeu.getUniteAt(i));
+            }
+        }
+        action3possible = true;//pas d'attaque donc action 3 possible
+        return NULL;
+    }
+    else
+    {
+        for(int i = position-1;i >0;i--)
+        {
+            if(aireJeu.getOccupation(i)==JOUEUR1)
+            {
+                return &(aireJeu.getUniteAt(i));
+            }
+        }
+        action3possible = true;
+        return NULL;
+    }
+}

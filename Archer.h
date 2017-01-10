@@ -1,15 +1,14 @@
+
 #ifndef ARCHER_H
 #define ARCHER_H
-
 #include "Unite.h"
 
-
-class Archer : public virtual Unite
+class Archer : public Unite
 {
     public:
-        Archer(CJoueur& jr,int pos);
+        Archer(CJoueur& jr);
         virtual ~Archer();
-        void action(int numAction, Unite& ennemiProche);
+        void action(int numAction, CAireJeux& aireJeu);
         void print() const;
         static int getPrixUnite(){return prixUnite;}
 
@@ -17,6 +16,7 @@ class Archer : public virtual Unite
     private:
         static int prixUnite;
         bool attaquer(Unite& ennemiProche) const;
+        Unite* trouveEnnemiProche(CAireJeux& aireJeu);
 };
 
 
