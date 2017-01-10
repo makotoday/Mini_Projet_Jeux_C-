@@ -15,8 +15,7 @@ class Archer : public Unite
     protected:
     private:
         static int prixUnite;
-        bool attaquer(Unite& ennemiProche) const;
-        Unite* trouveEnnemiProche(CAireJeux& aireJeu);
+        bool attaquer(Unite* ennemi) const;
 };
 
 

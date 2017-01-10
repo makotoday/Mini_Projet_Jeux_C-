@@ -24,11 +24,10 @@ void Archer::action(int numAction, CAireJeux& aireJeu)
     {
         case 0 : {
                 Unite* ennemiProche = trouveEnnemiProche(aireJeu);
-                if(ennemiProche !=NULL)
-                {attaquer(*ennemiProche);}break;
+                attaquer(ennemiProche);break;
             }
         case 1 : {avancer(aireJeu); break;}
-        case 2 : return;
+        case 2 : break;
         default : throw string("action inconnue pour l'archer");
     }
 }
@@ -40,8 +39,18 @@ void Archer::print() const
     Unite::print();
 }
 
-bool Archer::attaquer(Unite& ennemiProche) const
+bool Archer::attaquer(Unite* ennemi) const
 {
+    if(ennemi==NULL)//pas d'unité ennemi
+    {
+        if(peutAttaquerBase())
+        {
+            //enlever pv a la base
+            return true;
+        }
+        else return false;// rien à attaquer
+    }
+    Unite& ennemiProche = *ennemi;
     if(valsAbsolue(position - ennemiProche.getPosition())<=porteeMax) //la distance avec l'ennemi doit etre <= à la portée
     {
         ennemiProche.setpoints_de_vie(ennemiProche.getpoints_de_vie() - this->point_dAttaque);
@@ -50,28 +59,4 @@ bool Archer::attaquer(Unite& ennemiProche) const
     }else return false;
 }
 
-Unite* Archer::trouveEnnemiProche(CAireJeux& aireJeu)
-{
-    if(sonJoueur.getNumeroJoueur()==JOUEUR1)
-    {
-        for(int i = position+1;i <11;i++)
-        {
-            if(aireJeu.getOccupation(i)==JOUEUR2)
-            {
-                return &(aireJeu.getUniteAt(i));
-            }
-        }
-        return NULL;
-    }
-    else
-    {
-        for(int i = position-1;i >0;i--)
-        {
-            if(aireJeu.getOccupation(i)==JOUEUR1)
-            {
-                return &(aireJeu.getUniteAt(i));
-            }
-        }
-        return NULL;
-    }
-}
+

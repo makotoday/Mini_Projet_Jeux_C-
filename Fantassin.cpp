@@ -31,51 +31,34 @@ void Fantassin::action(int numAction, CAireJeux& aireJeu)
     switch(numAction)
     {
         case 0 : {
+                //action attaquer
                 Unite* ennemiProche = trouveEnnemiProche(aireJeu);
-                if(ennemiProche !=NULL)
-            action3possible = !attaquer(*ennemiProche);break;}
+            action3possible = !attaquer(ennemiProche);break;}
         case 1 : avancer(aireJeu);break;
         case 2 : {
             Unite* ennemiProche = trouveEnnemiProche(aireJeu);
-            if(action3possible&&ennemiProche!=NULL) attaquer(*ennemiProche);break;}
+            if(action3possible&&ennemiProche!=NULL) attaquer(ennemiProche);break;}
         default : throw string("action inconnue pour le fantassin");
     }
 }
 
-bool Fantassin::attaquer(Unite& ennemiProche) const
+bool Fantassin::attaquer(Unite* ennemi) const
 {
+    if(ennemi==NULL)//pas d'unité ennemi
+    {
+        if(peutAttaquerBase())
+        {
+            //enlever pv a la base
+            return true;
+        }
+        else return false;// rien à attaquer
+    }
+    Unite& ennemiProche = *ennemi;
     if(valsAbsolue(position - ennemiProche.getPosition())<=porteeMax) //la distance avec l'ennemi doit etre <= à la portée
     {
         ennemiProche.setpoints_de_vie(ennemiProche.getpoints_de_vie() - this->point_dAttaque);
         if(ennemiProche.getpoints_de_vie()<=0) ennemiProche.setMort();
         return true;
-    }else return false;
-}
-
-Unite* Fantassin::trouveEnnemiProche(CAireJeux& aireJeu)
-{
-    if(sonJoueur.getNumeroJoueur()==JOUEUR1)
-    {
-        for(int i = position+1;i <11;i++)
-        {
-            if(aireJeu.getOccupation(i)==JOUEUR2)
-            {
-                return &(aireJeu.getUniteAt(i));
-            }
-        }
-        action3possible = true;//pas d'attaque donc action 3 possible
-        return NULL;
     }
-    else
-    {
-        for(int i = position-1;i >0;i--)
-        {
-            if(aireJeu.getOccupation(i)==JOUEUR1)
-            {
-                return &(aireJeu.getUniteAt(i));
-            }
-        }
-        action3possible = true;
-        return NULL;
-    }
+    else return false;
 }

@@ -15,9 +15,10 @@ class Catapulte : public Unite
         static int getPrixUnite(){return prixUnite;}
     private:
         static int prixUnite;
-        bool attaquer(Unite& ennemiProche) const;
+        bool attaquer(Unite* ennemi) const;
         bool action3possible;// vrai si la premiere action a reussi
         Unite* trouveEnnemiProche(CAireJeux& aireJeu) ;
+        bool peutAttaquerBase() const;// si il n'y a pas d'ennemi on cible la base
 };
 
 #endif // CATAPULTE_H

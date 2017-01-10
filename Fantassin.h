@@ -12,12 +12,12 @@ class Fantassin : public Unite
            void action(int numAction, CAireJeux& aireJeu);
         void print() const;
         static int getPrixUnite(){return prixUnite;}
-
+    protected :
+        virtual bool attaquer(Unite* ennemi) const;
+        bool action3possible;//vrai : l'action 3 est possible
     private:
         static int prixUnite;
-        bool attaquer(Unite& ennemiProche) const;
-        bool action3possible;//vrai : l'action 3 est possible
-        Unite* trouveEnnemiProche(CAireJeux& aireJeu) ;
+
 };
 
 #endif // FANTASSIN_H

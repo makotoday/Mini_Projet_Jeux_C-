@@ -41,3 +41,34 @@ void Unite::avancer(CAireJeux& aireJeu)
     }
 }
 
+bool Unite::peutAttaquerBase() const//pour un fantassin et un archer
+{
+    return ((sonJoueur.getNumeroJoueur()==1&&position+porteeMax >= 11)
+    || (sonJoueur.getNumeroJoueur()==2&& position-porteeMax <= 0 ));
+}
+
+Unite* Unite::trouveEnnemiProche(CAireJeux& aireJeu)//pour un fantassin et un archer
+{
+    if(sonJoueur.getNumeroJoueur()==JOUEUR1)
+    {
+        for(int i = position+1;i <=11;i++)
+        {
+            if(aireJeu.getOccupation(i)==JOUEUR2)
+            {
+                return aireJeu.getUniteAt(i);
+            }
+        }
+        return NULL;
+    }
+    else
+    {
+        for(int i = position-1;i >=0;i--)
+        {
+            if(aireJeu.getOccupation(i)==JOUEUR1)
+            {
+                return aireJeu.getUniteAt(i);
+            }
+        }
+        return NULL;
+    }
+}

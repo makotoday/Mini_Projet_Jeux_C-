@@ -24,12 +24,13 @@ class Unite
         int porteeMax;
         CJoueur& sonJoueur;
         //attaquer et avancer renvoient faux si l'unité n'a pas pu executer l'action
-        virtual bool attaquer(Unite& ennemiProche) const = 0 ;
+        virtual bool attaquer(Unite* ennemi) const = 0 ;
         void avancer(CAireJeux& aireJeu); //avancer est commun a toute les unités
         int valsAbsolue(int n) const{return (n >0 ? n : -n);}//calcul de la distance entre 2 unité
         bool vivant;//indique si l'unite est toujours vivante
         int position; //indique la position de l'unite sur le plateau dans [0 - 11]
-        virtual Unite* trouveEnnemiProche(CAireJeux& aireJeu) =0;// renvoie la position de l'ennemi proche qui peut etre attaqué
+        virtual Unite* trouveEnnemiProche(CAireJeux& aireJeu);// renvoie la position de l'ennemi proche qui peut etre attaqué
+        virtual bool peutAttaquerBase() const;// si il n'y a pas d'ennemi on cible la base
 
     private:
 };
