@@ -5,7 +5,7 @@ using namespace std;
 
 int Archer::prixUnite = 12;
 
-Archer::Archer(CJoueur& jr) : Unite(jr)
+Archer::Archer(int joueur) : Unite(joueur)
 {
     points_de_vie = 8;
     point_dAttaque = 3;
@@ -17,18 +17,18 @@ Archer::~Archer()
     //dtor
 }
 
-void Archer::action(int numAction, CAireJeux& aireJeu)
+void Archer::action(int numAction,Unite* ennemie)
 {
     //l'archer attaque puis essaye d'avancer toujours
     switch(numAction)
     {
         case 0 : {
-                Unite* ennemiProche = trouveEnnemiProche(aireJeu);
-                attaquer(ennemiProche);break;
+                
+                action3possible=attaquer(ennemie);break;
             }
-        case 1 : {avancer(aireJeu); break;}
+        case 1 : {avancer(); break;}
         case 2 : break;
-        default : throw string("action inconnue pour l'archer");
+       // default : throw string("action inconnue pour l'archer");
     }
 }
 
@@ -39,7 +39,7 @@ void Archer::print() const
     Unite::print();
 }
 
-bool Archer::attaquer(Unite* ennemi) const
+bool Archer::attaquer(Unite* ennemi)
 {
     if(ennemi==NULL)//pas d'unité ennemi
     {

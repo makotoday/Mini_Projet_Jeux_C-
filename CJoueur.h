@@ -7,21 +7,19 @@
 #include <iostream>
 #include <vector>
 #include <typeinfo>
-
+#include "SuperSoldat.h"
+#include "Archer.h"
+#include "Catapulte.h"
+#include <iostream>
 using namespace std;
 
 
-enum TypeUnite{Uarcher,Ufantassin,Ucatapulte};
+enum TypeUnite{Uarcher,Ufantassin,Ucatapulte,UPASSTOUR};
 
-class Unite;
-class Archer;
-class Fantassin;
-class Catapulte;
-class SuperSoldat;
 
 class CJoueur {
 
-    friend class CAireJeux;
+    //friend class CAireJeux;
     private :
         string m_nom;//
         int  m_nbPiece; //nombre de piece du  joueur
@@ -29,10 +27,12 @@ class CJoueur {
         int numeroJoueur;
 		int m_PointVie;// le nombre de point de vie du joueur, il baissera quand sa tour sera attaqué
 		vector<Unite*> m_unite;// un tableau dynamique permetant de stocker les unitées
+		
 	public:
 
         CJoueur();
 		CJoueur(string nom, int nombre_piece,int pointvie,int numero);
+		CJoueur(const CJoueur &joueur); 
 		string getNom()const{return m_nom;};// retourne le nom du joueur
 		int getNombrePiece()const{return m_nbPiece;}; //retourne le nombre de piece du joueur
 		void payeUnite(int prixUnite);// la methode  retire la somme dü pour la creation de l'unité
@@ -43,8 +43,8 @@ class CJoueur {
 		void print()const;
         void creationUnite(TypeUnite type);
 		int getNumeroJoueur()const{return numeroJoueur;};
-		vector<Unite*> getTableauxUnite()const{return m_unite; };
-		Unite* getUnitAt(int position)const;
+		vector<Unite*> getTableauxUnite(){return m_unite; };
+		Unite* getUnitAt(int position);
 		void oterPV(int pv);// la methode permet de retirer  les points de vie du joueur, uniquement quand l'adversaire l'attaque directement
 		int getPointVie()const{return m_PointVie;};// permet de voir la constante
 

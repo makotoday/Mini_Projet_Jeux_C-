@@ -7,6 +7,8 @@
 
 #define JOUEUR1 1
 #define JOUEUR2 2
+#define CODE_ERREUR 255
+#define BASE 200
 
 using namespace std;
 class Unite;
@@ -32,7 +34,6 @@ class CAireJeux{
 	/* la methode permet de modifier l'information de la case.
 	 l'indice doit etre compris dans [1 ; m_taille] */
 	void modifieCase(int index, int joueur);// la methode prendra juste une joueur, le joueur 1 ou le joueur 2
-	Unite* getUniteAt(int position) const;//return l'unité à la position de l'aire de jeu
 	int getTailleTerrain()const{return m_tailleT;};
 	CJoueur getJoueur1()const{return m_joueur1;};
 	CJoueur getJoueur2()const{return m_joueur2;};
@@ -47,7 +48,8 @@ class CAireJeux{
     void action1(CJoueur& joueur);//le joueur applique l'action 1 sur  toute les unites
     void action2(CJoueur& joueur);//le joueur applique l'action 2 sur  toute les unites
     void action3(CJoueur& joueur);//le joueur applique l'action 3 sur  toute les unites
-
+	
+	int getEnnemieProche(int position_unite,int porte_attaque,int numero_ennemi);// retourne la position de l'ennemi la plus proche ou l'CODE_ERREUR 
 	void Run();
 	void Tour();
 

@@ -6,7 +6,7 @@ using namespace std;
 int Catapulte::prixUnite = 20;
 int Catapulte::porteeMin = 2;
 
-Catapulte::Catapulte(CJoueur& jr) :Unite(jr)
+Catapulte::Catapulte(int joueur) :Unite(joueur)
 {
     points_de_vie = 10;
     point_dAttaque = 3;
@@ -24,28 +24,28 @@ void Catapulte::print() const
     Unite::print();
 }
 
-void Catapulte::action(int numAction, CAireJeux& aireJeu)
+void Catapulte::action(int numAction,Unite *ennemie)
 {
     switch(numAction)
     {
         case 0 : {
                     //trouve l'ennemi 2 ou 3 cases plus loin :
-                    Unite* ennemiProche = trouveEnnemiProche(aireJeu);
+                    
                     //verifie si il est à portée puis attaque :
-                     action3possible = attaquer(ennemiProche);
+                     action3possible = attaquer(ennemie);
                      //attaque sur la case à coté (selon le joueur)
-                     if(sonJoueur.getNumeroJoueur()==1){
-                     action3possible += attaquer(aireJeu.getUniteAt(aireJeu.getUniteAt(position+1));
-                     } else  action3possible += attaquer(aireJeu.getUniteAt(aireJeu.getUniteAt(position-1));
+                    /* if(m_num_joueur==1){
+                     action3possible += attaquer(ennemie);
+                     } else*/  action3possible += attaquer(ennemie);
                      break;
                 }
         case 1 : break;// l'action 2 n'existe pas pour la catapulte
-        case 2 : {if(action3possible) avancer(aireJeu);break;}
-        default : throw string("action inconnue pour la catapulte");
+        case 2 : {if(action3possible) avancer();break;}
+       // default : throw string("action inconnue pour la catapulte");
     }
 }
 
-bool Catapulte::attaquer(Unite* ennemi) const
+bool Catapulte::attaquer(Unite* ennemi)
 {
     if(ennemi==NULL)//pas d'unité ennemi
     {
@@ -70,11 +70,13 @@ bool Catapulte::attaquer(Unite* ennemi) const
 bool Catapulte::peutAttaquerBase() const
 {
     //Comme il y a pas d'ennemi, la catapulte attaque la base seulement si elle est a portée de la base adverse
-    return (sonJoueur.getNumeroJoueur()==1&&(position+porteeMax >= 11 && position + porteeMin <=11 ))
-    || (sonJoueur.getNumeroJoueur()==2&&(position-porteeMax <= 0 && position - porteeMin >=0 ));
+    
+    if(num_joueur==JOUEUR1 && (position+porteeMax >= 11 && position + porteeMin <=11 )) return true; 
+     if(num_joueur==JOUEUR1 && (position-porteeMax <= 0 && position -porteeMin >=0 )) return true;
+	return false; 
 }
 
-Unite* Catapulte::trouveEnnemiProche(CAireJeux& aireJeu)
+/*Unite* Catapulte::trouveEnnemiProche(CAireJeux& aireJeu)
 {
      if(sonJoueur.getNumeroJoueur()==JOUEUR1)
      {
@@ -101,3 +103,4 @@ Unite* Catapulte::trouveEnnemiProche(CAireJeux& aireJeu)
         return NULL;
     }
 }
+*/

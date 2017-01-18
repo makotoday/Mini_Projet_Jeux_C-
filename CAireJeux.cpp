@@ -1,6 +1,4 @@
 #include "CAireJeux.h"
-#include "Unite.h"
-#include "CJoueur.h"
 
 
 
@@ -72,22 +70,7 @@ int  CAireJeux::getOccupation(int index)const
 	return m_t[index];
 }
 
-Unite* CAireJeux::getUniteAt(int position) const
-{
-	int joueur=getOccupation(position);
-	if(joueur==1) return m_joueur1.getUnitAt(position);
-	if(joueur==2){
 
-		int post=position-m_tailleT;
-		if(post<0){
-			post=post*-1;
-			return m_joueur2.getUnitAt(post-1);
-
-		}
-		if(post==0)return m_joueur2.getUnitAt(post);
-	}
-	return NULL;
-}
 
 
 void CAireJeux::Run(){
@@ -131,6 +114,7 @@ void CAireJeux::Tour(){
 	m_joueur2.creationSuperSoldat();
 	cout<<"Etat du terrain  de jeux en fin de Tour \n";
 	printT();
+	
 }
 
 void CAireJeux::diedUnite(CJoueur& joueur){
@@ -199,31 +183,85 @@ bool CAireJeux::creerUnite_Pas(CJoueur& joueur){
 void CAireJeux::action1(CJoueur& joueur){
 
     vector<Unite*> m_unite = joueur.getTableauxUnite();
+    int num_j=joueur.getNumeroJoueur(); 
+    CJoueur c; 
+    if(num_j==JOUEUR1) c=m_joueur2;
+    else c=m_joueur1;  
 	int size=m_unite.size()-1;
-	cout<<"------ Phase 1: action 1 ------------------\n";
+	if
+	cout<<"------ Phase 1: action 1  ATTAQUER ------------------\n";
 	for(int i=size; i>0; --i){
-		m_unite[i]->action(0,joueur);
+		int position_ennemi=getEnnemieProche(m_unite[i]->getPosition(),m_unite[i]->getPorteeMAX(),c.getNumeroJoueur()); 
+		if(position_ennemi!=CODE_ERREUR){
+		if(position_ennemi==BASE){
+			if(m_unite[i]->getAttaquePossible()==true) m_unite[i]->print();
+		}
+		m_unite[i]->action(0,c.getUnitAt(position_ennemi));
 		cout<<"* ";
-		m_unite[i]->print();
+		m_unite[i]->print(); 
+		
+			}
+		
 	}
 
 }
 
 
+int CAireJeux::getEnnemieProche(int position_unite,int porte_attaque,int numero_ennemi){
+	
+	
+	if(numero_ennemi==JOUEUR2){
+		int tmp=position+porte_attaque; 
+		for(int i=position_unite+1;i<tmp+1;i++){
+		
+			if(m_t[i]==numero_ennemi) return i; 
+			if(i==11) return BASE; 
+		}
+	}else{
+		int tmp=position-porte_attaque; 
+		for(int i=position_unite-1;i>tmp-1;i--){
+		
+			if(m_t[i]==numero_ennemi) return i; 
+			if(i==0) return BASE;		
+			}
+	}
+	
+	
+	
+	return CODE_ERREUR; 
+	}
+
 void CAireJeux::action2(CJoueur& joueur){
 
     vector<Unite*> m_unite = joueur.getTableauxUnite();
-	cout<<"------ Phase 2: action 2 ------------------\n";
+    int num_j=joueur.getNumeroJoueur(); 
+	cout<<"------ Phase 2: action 2  AVANCER------------------\n";
 	int size=m_unite.size();
 	for(int i=0; i<size;i++){
-		m_unite[i]->action(1,aire);
-		cout<<"*  ";
-		m_unite[i]->print();
+		if(num_j==JOUEUR1){
+		if(getOccupation(m_unite[i].getPosition()+1)==0){
+			m_unite[i]->action(1,nullptr);
+		   cout<<"*  ";
+		   m_unite[i]->print();
+		   modifieCase(m_unite[i]->getPosition(),num_j); 
+			
+			}	
+		}else{
+			if(getOccupation(m_unite[i].getPosition()-1)==0){
+			m_unite[i]->action(1,nullptr);
+		    cout<<"*  ";
+		    m_unite[i]->print();
+			modifieCase(m_unite[i]->getPosition(),num_j);
+			}	
+		}
+		
+		
 	}
 }
 
 void CAireJeux::action3(CJoueur& joueur){
 
+/*
     vector<Unite*> m_unite = joueur.getTableauxUnite();
 	cout<<"------ Phase 3: action 3 ------------------\n";
 	int size=m_unite.size();
@@ -231,5 +269,27 @@ void CAireJeux::action3(CJoueur& joueur){
 		m_unite[i]->action(2,aire);
 		cout<<"*  ";
 		m_unite[i]->print();
+	}*/
+	
+    vector<Unite*> m_unite = joueur.getTableauxUnite();
+    int num_j=joueur.getNumeroJoueur(); 
+    CJoueur c; 
+    if(num_j==JOUEUR1) c=m_joueur2;
+    else c=m_joueur1;  
+	int size=m_unite.size()-1;
+	if
+	cout<<"------ Phase 1: action 1  ATTAQUER ------------------\n";
+	for(int i=size; i>0; --i){
+		int position_ennemi=getEnnemieProche(m_unite[i]->getPosition(),m_unite[i]->getPorteeMAX(),c.getNumeroJoueur()); 
+		if(position_ennemi!=CODE_ERREUR){
+		if(position_ennemi==BASE){
+			if(m_unite[i]->getAttaquePossible()==true) m_unite[i]->print();
+		}
+		m_unite[i]->action(2,c.getUnitAt(position_ennemi));
+		cout<<"* ";
+		m_unite[i]->print(); 
+		
+			}
+		
 	}
 }

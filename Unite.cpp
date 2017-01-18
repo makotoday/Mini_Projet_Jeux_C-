@@ -1,18 +1,18 @@
 #include "Unite.h"
 #include <iostream>
-#include "CAireJeux.h"
+
 
 using namespace std;
 
 //int Unite::prixUnite;
 
-Unite::Unite(CJoueur& jr ): sonJoueur(jr), vivant(true)
+Unite::Unite(int joueur ): num_joueur(joueur), vivant(true)
 {
-if(jr.getNumeroJoueur()==JOUEUR1)
-        position = 0;//case de la premeire base
-else if(jr.getNumeroJoueur()==JOUEUR2)
-    position = 11;//case de la seconde base
-else throw string("ERREUR : mauvais numeroJoueur");
+if(num_joueur==JOUEUR1) position = 0;//case de la premeire base
+if(num_joueur==JOUEUR2) position = 11;//case de la seconde base
+//else throw string("ERREUR : mauvais numeroJoueur");
+evolution=false; 
+action3possible=false; 
 }
 
 Unite::~Unite()
@@ -29,13 +29,13 @@ void Unite::print() const
     cout << "position : " << position <<endl;
 }
 
-void Unite::avancer(CAireJeux& aireJeu)
+void Unite::avancer()
 {
     //verification que la case suivante est vide et selon le joueur avancer
-    if(this->sonJoueur.getNumeroJoueur()==JOUEUR1&&aireJeu.getOccupation(position+1)==0)
+    if(num_joueur==JOUEUR1)
     {
        position++;
-    }else if(this->sonJoueur.getNumeroJoueur()==JOUEUR2&&aireJeu.getOccupation(position-1)==0)
+    }else if(num_joueur==JOUEUR2)
     {
         position--;
     }
@@ -43,11 +43,12 @@ void Unite::avancer(CAireJeux& aireJeu)
 
 bool Unite::peutAttaquerBase() const//pour un fantassin et un archer
 {
-    return ((sonJoueur.getNumeroJoueur()==1&&position+porteeMax >= 11)
-    || (sonJoueur.getNumeroJoueur()==2&& position-porteeMax <= 0 ));
+	if(num_joueur==JOUEUR1 && position +porteeMax >= 11) return true; 
+	if(num_joueur==JOUEUR1 && position +porteeMax <= 0) return true; 
+	return false; 
 }
 
-Unite* Unite::trouveEnnemiProche(CAireJeux& aireJeu)//pour un fantassin et un archer
+/*Unite* Unite::trouveEnnemiProche(CAireJeux& aireJeu)//pour un fantassin et un archer
 {
     if(sonJoueur.getNumeroJoueur()==JOUEUR1)
     {
@@ -71,4 +72,12 @@ Unite* Unite::trouveEnnemiProche(CAireJeux& aireJeu)//pour un fantassin et un ar
         }
         return NULL;
     }
+}
+*/
+
+
+
+void Unite::oterPV(int pv){
+	points_de_vie=points_de_vie-pv; 
+	
 }

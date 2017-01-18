@@ -6,16 +6,16 @@
 class Archer : public Unite
 {
     public:
-        Archer(CJoueur& jr);
+        Archer(int joueur);
         virtual ~Archer();
-        void action(int numAction, CAireJeux& aireJeu);
+        void action(int numAction,Unite* ennemie);
         void print() const;
         static int getPrixUnite(){return prixUnite;}
 
     protected:
     private:
         static int prixUnite;
-        bool attaquer(Unite* ennemi) const;
+        bool attaquer(Unite* ennemi);
 };
 
 
