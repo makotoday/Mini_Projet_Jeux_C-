@@ -5,18 +5,15 @@
 #include <string>
 #include "CJoueur.h"
 
+
 #define JOUEUR1 1
 #define JOUEUR2 2
 #define CODE_ERREUR 255
 #define BASE 200
+#define MAXCASE 12
 
 using namespace std;
 class Unite;
-//class CJoueur;
-//class Archer;
-//class SuperSoldat;
-//class Fantassin;
-//class Catapulte;
 
 class CAireJeux{
         friend class CJoueur;
@@ -48,8 +45,7 @@ class CAireJeux{
     void action1(CJoueur& joueur);//le joueur applique l'action 1 sur  toute les unites
     void action2(CJoueur& joueur);//le joueur applique l'action 2 sur  toute les unites
     void action3(CJoueur& joueur);//le joueur applique l'action 3 sur  toute les unites
-	
-	int getEnnemieProche(int position_unite,int porte_attaque,int numero_ennemi);// retourne la position de l'ennemi la plus proche ou l'CODE_ERREUR 
+
 	void Run();
 	void Tour();
 

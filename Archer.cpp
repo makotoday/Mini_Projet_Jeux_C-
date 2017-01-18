@@ -10,6 +10,7 @@ Archer::Archer(int joueur) : Unite(joueur)
     points_de_vie = 8;
     point_dAttaque = 3;
     porteeMax = 3;
+    type = Uarcher;
 }
 
 Archer::~Archer()
@@ -23,7 +24,7 @@ void Archer::action(int numAction,Unite* ennemie)
     switch(numAction)
     {
         case 0 : {
-                
+
                 action3possible=attaquer(ennemie);break;
             }
         case 1 : {avancer(); break;}
