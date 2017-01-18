@@ -11,8 +11,8 @@ Unite::Unite(int joueur ): num_joueur(joueur), vivant(true)
 if(num_joueur==JOUEUR1) position = 0;//case de la premeire base
 if(num_joueur==JOUEUR2) position = 11;//case de la seconde base
 //else throw string("ERREUR : mauvais numeroJoueur");
-evolution=false; 
-action3possible=false; 
+evolution=false;
+action3possible=false;
 }
 
 Unite::~Unite()
@@ -43,41 +43,32 @@ void Unite::avancer()
 
 bool Unite::peutAttaquerBase() const//pour un fantassin et un archer
 {
-	if(num_joueur==JOUEUR1 && position +porteeMax >= 11) return true; 
-	if(num_joueur==JOUEUR1 && position +porteeMax <= 0) return true; 
-	return false; 
+	if(num_joueur==JOUEUR1 && position +porteeMax >= 11) return true;
+	if(num_joueur==JOUEUR1 && position +porteeMax <= 0) return true;
+	return false;
 }
 
-/*Unite* Unite::trouveEnnemiProche(CAireJeux& aireJeu)//pour un fantassin et un archer
-{
-    if(sonJoueur.getNumeroJoueur()==JOUEUR1)
-    {
-        for(int i = position+1;i <=11;i++)
-        {
-            if(aireJeu.getOccupation(i)==JOUEUR2)
-            {
-                return aireJeu.getUniteAt(i);
-            }
-        }
-        return NULL;
-    }
-    else
-    {
-        for(int i = position-1;i >=0;i--)
-        {
-            if(aireJeu.getOccupation(i)==JOUEUR1)
-            {
-                return aireJeu.getUniteAt(i);
-            }
-        }
-        return NULL;
-    }
-}
-*/
 
+ int Unite::getPosEnnemiProche(int plateau[])
+ {
+     int numero_ennemi = (num_joueur==JOUEUR1)? JOUEUR2 : JOUEUR1;//numero de l'ennemi
+	if(numero_ennemi==JOUEUR2){
+		for(int i=position+1;i<CASE_MAX-1;i++){
 
+			if(plateau[i]==numero_ennemi) return i;
+		}
+		return BASE;//i =11
+	}else if(numero_ennemi==JOUEUR1){
+		for(int i=position-1;i>0;i--){
+
+			if(plateau[i]==numero_ennemi) return i;
+			}
+            return BASE;//i = 0
+	}
+    else return CODE_ERREUR;
+ }
 
 void Unite::oterPV(int pv){
-	points_de_vie=points_de_vie-pv; 
-	
+	points_de_vie=points_de_vie-pv;
+
 }

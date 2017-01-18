@@ -12,6 +12,7 @@ Fantassin::Fantassin(int joueur) : Unite(joueur)
     points_de_vie = 10;
     point_dAttaque = 4;
     porteeMax = 1;
+    type = Ufantassin;
 }
 
 Fantassin::~Fantassin()

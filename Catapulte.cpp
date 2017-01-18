@@ -11,6 +11,7 @@ Catapulte::Catapulte(int joueur) :Unite(joueur)
     points_de_vie = 10;
     point_dAttaque = 3;
     porteeMax = 3;//portée réelle de 4 car elle tire 4 cases plus loin en visant 3
+    type = Ucatapulte;
 }
 
 Catapulte::~Catapulte()
@@ -30,7 +31,7 @@ void Catapulte::action(int numAction,Unite *ennemie)
     {
         case 0 : {
                     //trouve l'ennemi 2 ou 3 cases plus loin :
-                    
+
                     //verifie si il est à portée puis attaque :
                      action3possible = attaquer(ennemie);
                      //attaque sur la case à coté (selon le joueur)
@@ -70,37 +71,27 @@ bool Catapulte::attaquer(Unite* ennemi)
 bool Catapulte::peutAttaquerBase() const
 {
     //Comme il y a pas d'ennemi, la catapulte attaque la base seulement si elle est a portée de la base adverse
-    
-    if(num_joueur==JOUEUR1 && (position+porteeMax >= 11 && position + porteeMin <=11 )) return true; 
+
+    if(num_joueur==JOUEUR1 && (position+porteeMax >= 11 && position + porteeMin <=11 )) return true;
      if(num_joueur==JOUEUR1 && (position-porteeMax <= 0 && position -porteeMin >=0 )) return true;
-	return false; 
+	return false;
 }
 
-/*Unite* Catapulte::trouveEnnemiProche(CAireJeux& aireJeu)
-{
-     if(sonJoueur.getNumeroJoueur()==JOUEUR1)
-     {
-        for(int i = position+2;i <=11;i++)
-        {
-            if(aireJeu.getOccupation(i)==JOUEUR2)
-            {
-                return aireJeu.getUniteAt(i);
-            }
-        }
-        action3possible = true; //pas d'ennemi sur le plateau donc la catapulte avance
-        return NULL;
-    }
-    else
-    {
-        for(int i = position-2;i >=0;i--)
-        {
-            if(aireJeu.getOccupation(i)==JOUEUR1)
-            {
-                return aireJeu.getUniteAt(i);
-            }
-        }
-        action3possible = true;
-        return NULL;
-    }
-}
-*/
+  int Catapulte::getPosEnnemiProche(int plateau[])
+ {
+      int numero_ennemi = (num_joueur==JOUEUR1)? JOUEUR2 : JOUEUR1;
+	if(numero_ennemi==JOUEUR2){
+		for(int i=position+porteeMin;i<CASE_MAX-1;i++){//portee minimale pris en compte pour la catapulte
+
+			if(plateau[i]==numero_ennemi) return i;
+		}
+		return BASE;
+	}else if (numero_ennemi==JOUEUR1){
+		for(int i=position-1;i>0;i--){
+
+			if(plateau[i]==numero_ennemi) return i;
+			}
+			return BASE;
+	}
+    else return CODE_ERREUR;
+ }

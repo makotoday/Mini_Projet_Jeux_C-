@@ -1,24 +1,25 @@
 
+#ifndef __CJOUEUR_H__
+#define __CJOUEUR_H__
+
+
 #include <string>
 #include <ctime>
 #include <cstdlib>
-#ifndef __CJOUEUR_H__
-#define __CJOUEUR_H__
 #include <iostream>
 #include <vector>
 #include <typeinfo>
-#include "SuperSoldat.h"
-#include "Archer.h"
-#include "Catapulte.h"
+#include "Unite.h"
 #include <iostream>
+
+
 using namespace std;
 
 
-enum TypeUnite{Uarcher,Ufantassin,Ucatapulte,UPASSTOUR};
+//enum TypeUnite{Uarcher,Ufantassin,Ucatapulte,UPASSTOUR};
 
 
 class CJoueur {
-
     //friend class CAireJeux;
     private :
         string m_nom;//
@@ -27,12 +28,12 @@ class CJoueur {
         int numeroJoueur;
 		int m_PointVie;// le nombre de point de vie du joueur, il baissera quand sa tour sera attaqué
 		vector<Unite*> m_unite;// un tableau dynamique permetant de stocker les unitées
-		
+
 	public:
 
         CJoueur();
 		CJoueur(string nom, int nombre_piece,int pointvie,int numero);
-		CJoueur(const CJoueur &joueur); 
+		CJoueur(const CJoueur &joueur);
 		string getNom()const{return m_nom;};// retourne le nom du joueur
 		int getNombrePiece()const{return m_nbPiece;}; //retourne le nombre de piece du joueur
 		void payeUnite(int prixUnite);// la methode  retire la somme dü pour la creation de l'unité
@@ -54,10 +55,6 @@ class CJoueur {
 		void creationSuperSoldat();//la méthode permet de verifier si  on un soldat peut devenir un super soldat
 
 
-
-
 };
-
-#include "CJoueur.cpp"
 
 #endif
