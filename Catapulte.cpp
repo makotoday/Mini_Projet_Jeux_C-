@@ -41,7 +41,7 @@ void Catapulte::action(int numAction,Unite *ennemie)
                      break;
                 }
         case 1 : break;// l'action 2 n'existe pas pour la catapulte
-        case 2 : {if(action3possible) avancer();break;}
+        case 2 : {if(!action3possible) avancer();break;}
        // default : throw string("action inconnue pour la catapulte");
     }
 }
@@ -57,12 +57,11 @@ bool Catapulte::attaquer(Unite* ennemi)
         }
         else return false;// rien à attaquer
     }
-    Unite& ennemiProche = *ennemi;
-    int distance = valsAbsolue(position-ennemiProche.getPosition());
+    int distance = valsAbsolue(position-ennemi->getPosition());
     if(distance >= porteeMin &&distance <=porteeMax)
     {
-        ennemiProche.setpoints_de_vie(ennemiProche.getpoints_de_vie()-point_dAttaque);
-        if(ennemiProche.getpoints_de_vie()<=0) ennemiProche.setMort();
+        ennemi->setpoints_de_vie(ennemi->getpoints_de_vie()-point_dAttaque);
+        if(ennemi->getpoints_de_vie()<=0) ennemi->setMort();
         return true;//attaque reussie
     }
     else return false;//ennemi trop loin ou trop pres

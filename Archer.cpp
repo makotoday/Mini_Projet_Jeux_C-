@@ -51,11 +51,10 @@ bool Archer::attaquer(Unite* ennemi)
         }
         else return false;// rien à attaquer
     }
-    Unite& ennemiProche = *ennemi;
-    if(valsAbsolue(position - ennemiProche.getPosition())<=porteeMax) //la distance avec l'ennemi doit etre <= à la portée
+    if(valsAbsolue(position - ennemi->getPosition())<=porteeMax) //la distance avec l'ennemi doit etre <= à la portée
     {
-        ennemiProche.setpoints_de_vie(ennemiProche.getpoints_de_vie() - this->point_dAttaque);
-        if(ennemiProche.getpoints_de_vie()<=0) ennemiProche.setMort();
+        ennemi->setpoints_de_vie(ennemi->getpoints_de_vie() - this->point_dAttaque);
+        if(ennemi->getpoints_de_vie()<=0) ennemi->setMort();
         return true;
     }else return false;
 }

@@ -41,23 +41,23 @@ void CAireJeux::printT(){
 			else{
                 switch(unite->quelleType()){
                     case Uarcher :{
-                    if(m_t[i]==1)cout<<" | A1 | ";
-                    if(m_t[i]==2)cout<<" | A2 | ";
+                    if(m_t[i]==JOUEUR1)cout<<" | A1 | ";
+                    if(m_t[i]==JOUEUR2)cout<<" | A2 | ";
                     break;
                     }
                case Ucatapulte : {
-                    if(m_t[i]==1)cout<<" | C1 | ";
-                    if(m_t[i]==2)cout<<" | C2 | ";
+                    if(m_t[i]==JOUEUR1)cout<<" | C1 | ";
+                    if(m_t[i]==JOUEUR2)cout<<" | C2 | ";
                     break;
                 }
                 case Ufantassin :{
-                    if(m_t[i]==1)cout<<" | F1 | ";
-                    if(m_t[i]==2)cout<<" | F2 | ";
+                    if(m_t[i]==JOUEUR1)cout<<" | F1 | ";
+                    if(m_t[i]==JOUEUR2)cout<<" | F2 | ";
                     break;
                 }
                 case USuperSoldat :{
-                    if(m_t[i]==1)cout<<" | S1 | ";
-                    if(m_t[i]==2)cout<<" | S2 | ";
+                    if(m_t[i]==JOUEUR1)cout<<" | S1 | ";
+                    if(m_t[i]==JOUEUR2)cout<<" | S2 | ";
                     break;
                     }
                 }
@@ -70,8 +70,7 @@ void CAireJeux::printT(){
 
 void CAireJeux::modifieCase(int index,int joueur)
 {
-// on pourrait mettre une exception de depassement de case
-
+if(index<0||index>MAXCASE) throw string("Erreur : index pas dans le tableau");
 	m_t[index]=joueur;
 
 
@@ -106,7 +105,7 @@ void CAireJeux::Run(){
 		cout<<"-------------FIN DE TOUR "<<tour<<" -------------\n";
 
 		tour++;
-		if(tour==5)fin_partie=true;
+		if(tour==10)fin_partie=true;
 	}
 
 
@@ -134,7 +133,7 @@ void CAireJeux::diedUnite(CJoueur& joueur){
 
     vector<Unite*> m_unite = joueur.getTableauxUnite();
     int size = m_unite.size();
-	// boucle pour mettre les poiteur à nulle
+	// boucle pour mettre les pointeurs à nulle
 	for(int i=0; i<size; i++){
 		if(m_unite[i]->getEtatUnit()==false){
 
@@ -144,17 +143,17 @@ void CAireJeux::diedUnite(CJoueur& joueur){
 		}
 
 	}
-	//boucle pour supprimer les unité dans le vecteur
-	for(vector<Unite*>::iterator it=m_unite.begin();it!=m_unite.end();++it){
+	//boucle pour supprimer les unités dans le vecteur
+	for(vector<Unite*>::iterator it=m_unite.begin();it!=m_unite.end();it++){
 
 		if(*it==NULL){
 			cout<<"sortie des perso"<<endl;
-			m_unite.erase(it);
+			m_unite.erase(it);//retire l'unité
 		}
 	}
-	if(m_unite.size()==1){
+	if(m_unite.size()==0){//rien a faire
+            return;
 
-		if(m_unite[0]==NULL)m_unite.erase(m_unite.begin());
 	}else if( m_unite[m_unite.size()-1]==NULL){
 
             m_unite.erase(m_unite.end());
@@ -230,34 +229,22 @@ void CAireJeux::action2(CJoueur& joueur){
 		if(getOccupation(m_unite[i]->getPosition()+1)==0){
 			m_unite[i]->action(1,nullptr);
 		   cout<<"*  ";
+            modifieCase(m_unite[i]->getPosition(),num_j);
 		   m_unite[i]->print();
-		   modifieCase(m_unite[i]->getPosition(),num_j);
 
 			}
 		}else{
 			if(getOccupation(m_unite[i]->getPosition()-1)==0){
 			m_unite[i]->action(1,nullptr);
 		    cout<<"*  ";
+            modifieCase(m_unite[i]->getPosition(),num_j);
 		    m_unite[i]->print();
-			modifieCase(m_unite[i]->getPosition(),num_j);
 			}
 		}
-
-
 	}
 }
 
 void CAireJeux::action3(CJoueur& joueur){
-
-/*
-    vector<Unite*> m_unite = joueur.getTableauxUnite();
-	cout<<"------ Phase 3: action 3 ------------------\n";
-	int size=m_unite.size();
-	for(int i=0;i<size;i++){
-		m_unite[i]->action(2,aire);
-		cout<<"*  ";
-		m_unite[i]->print();
-	}*/
 
     vector<Unite*> m_unite = joueur.getTableauxUnite();
     int num_j=joueur.getNumeroJoueur();
@@ -274,7 +261,9 @@ void CAireJeux::action3(CJoueur& joueur){
 		}
 		m_unite[i]->action(2,c.getUnitAt(position_ennemi));
 		cout<<"* ";
+        modifieCase(m_unite[i]->getPosition(),num_j);
 		m_unite[i]->print();
+
 
 			}
 
