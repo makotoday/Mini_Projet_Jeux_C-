@@ -61,7 +61,20 @@ bool Fantassin::attaquer(Unite* ennemi)
 			 ennemi->setMort();
 			 evolution=true;
 		 }
+		 cout<<"Fantassin "<<num_joueur<<" attaque ennemi\n";
+        cout<<"position : "<<position<<"\t position ennemi "<<ennemi->getPosition()<<endl;
+        cout<<"PV : "<<points_de_vie<<"\t PV ennemi : "<<ennemi->getpoints_de_vie()<<endl;
         return true;
     }
     else return false;
+}
+
+
+
+void Fantassin::avancer(){
+
+Unite::avancer();
+cout<<"L UNITE FANTASSIN DU JOUEUR "<<num_joueur<<"  AVANCE \n";
+
+
 }

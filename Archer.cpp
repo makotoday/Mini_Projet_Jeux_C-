@@ -55,8 +55,16 @@ bool Archer::attaquer(Unite* ennemi)
     {
         ennemi->setpoints_de_vie(ennemi->getpoints_de_vie() - this->point_dAttaque);
         if(ennemi->getpoints_de_vie()<=0) ennemi->setMort();
+        cout<<"Archer "<<num_joueur<<" attaque ennemi\n";
+        cout<<"position : "<<position<<"\t position ennemi "<<ennemi->getPosition()<<endl;
+        cout<<"PV : "<<points_de_vie<<"\t PV ennemi : "<<ennemi->getpoints_de_vie()<<endl;
         return true;
     }else return false;
 }
 
 
+void Archer::avancer(){
+Unite::avancer();
+cout<<"L UNITE ARCHER  DU JOUEUR "<<num_joueur<<"  AVANCE \n";
+
+}

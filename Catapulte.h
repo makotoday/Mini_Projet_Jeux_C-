@@ -19,6 +19,7 @@ class Catapulte : public Unite
         bool attaquer(Unite* ennemi);
        // bool action3possible;// vrai si la premiere action a reussi
         bool peutAttaquerBase() const;// si il n'y a pas d'ennemi on cible la base
+        void avancer();
 };
 
 #endif // CATAPULTE_H

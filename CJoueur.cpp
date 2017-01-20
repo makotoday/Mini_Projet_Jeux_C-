@@ -56,15 +56,18 @@ void CJoueur::creationUnite(TypeUnite type)
 
 		m_unite.push_back(new Archer(this->numeroJoueur));
 		this->payeUnite(Archer::getPrixUnite());
+		cout<<"CREATION UNITE ARCHER\n";
 		break;
 
         case Ufantassin :
 			m_unite.push_back(new Fantassin(this->numeroJoueur));
 			this->payeUnite(Fantassin::getPrixUnite());
+			cout<<"CREATION UNITE FANTASSIN\n";
 			break;
         case Ucatapulte :
 			m_unite.push_back(new Catapulte(this->numeroJoueur));
 			this->payeUnite(Catapulte::getPrixUnite());
+			cout<<"CREATION UNITE CATAPULTE\n";
 			break;
 	default : cout<<"PAS DE CREATION D UNITE \n";break;
     }
@@ -89,7 +92,7 @@ TypeUnite CJoueur::choixUnite(){
     // strategie : l'IA tente d'acheter une unité au hasard, si il y arrive pas alors il passe son tour
 
 	TypeUnite unite;
-	srand(time(NULL));
+	//srand(time(NULL));
 
 
 		int tmp=rand()%4;//entre 0 et 3
@@ -137,7 +140,7 @@ void CJoueur::creationSuperSoldat(){
 	int size=m_unite.size();
 	for(int i=0;i<size;i++){
 
-		if(typeid(*m_unite[i])==typeid(Fantassin)){
+		if(m_unite[i]->quelleType()==Ufantassin){
 			Fantassin* soldat=dynamic_cast<Fantassin*>(m_unite[i]);
 			if(soldat->getEvolution()==true){
 				int position=soldat->getPosition();
@@ -145,8 +148,14 @@ void CJoueur::creationSuperSoldat(){
 				SuperSoldat* sup_soldat=new SuperSoldat(this->getNumeroJoueur());
 				sup_soldat->setpoints_de_vie(pv);
 				sup_soldat->setPosition(position);
+				if(i==size-1){
+                    m_unite.erase(m_unite.end());
+                    m_unite.push_back(sup_soldat);
+				}else{
 				m_unite.erase(m_unite.begin()+i);
 				m_unite.emplace(m_unite.begin()+i,sup_soldat);
+				}
+
 			}
 		}
 
@@ -155,7 +164,15 @@ void CJoueur::creationSuperSoldat(){
 
 
 
+void CJoueur::printProfile(){
 
+cout<<"Nom :"<<m_nom;
+cout<<"\t\t PV : "<<m_PointVie;
+cout<<"\t\tNombre de Piece : "<<m_nbPiece;
+cout<<"\t\tNombre Unite : "<<m_unite.size()<<endl;
+
+
+}
 
 
 

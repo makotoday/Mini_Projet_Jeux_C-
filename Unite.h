@@ -42,7 +42,7 @@ class Unite
         bool action3possible;
         //attaquer et avancer renvoient faux si l'unité n'a pas pu executer l'action
         virtual bool attaquer(Unite* ennemi) = 0 ;
-        void avancer(); //avancer est commun a toute les unités
+        virtual void avancer(); //avancer est commun a toute les unités
         int valsAbsolue(int n) const{return (n >0 ? n : -n);}//calcul de la distance entre 2 unité
         bool vivant;//indique si l'unite est toujours vivante
         int position; //indique la position de l'unite sur le plateau dans [0 - 11]

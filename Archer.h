@@ -16,6 +16,7 @@ class Archer : public Unite
     private:
         static int prixUnite;
         bool attaquer(Unite* ennemi);
+        void avancer();
 };
 
 

@@ -13,8 +13,9 @@ class Fantassin : public Unite
         void print() const;
         static int getPrixUnite(){return prixUnite;}
     protected :
-        virtual bool attaquer(Unite* ennemi);
+         bool attaquer(Unite* ennemi);
         //bool action3possible;//vrai : l'action 3 est possible
+        void avancer();
     private:
         static int prixUnite;
 

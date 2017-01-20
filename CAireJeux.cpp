@@ -65,7 +65,8 @@ void CAireJeux::printT(){
 
 	}
 	cout<<endl<<endl;
-
+    m_joueur1.printProfile();
+    m_joueur2.printProfile();
 }
 
 void CAireJeux::modifieCase(int index,int joueur)
@@ -105,7 +106,7 @@ void CAireJeux::Run(){
 		cout<<"-------------FIN DE TOUR "<<tour<<" -------------\n";
 
 		tour++;
-		if(tour==10)fin_partie=true;
+		if(tour==15)fin_partie=true;
 	}
 
 
@@ -114,49 +115,38 @@ void CAireJeux::Run(){
 
 
 void CAireJeux::Tour(){
-	cout<<"Les joueur recoivent "<<piece_joueur<<" d or \n ";
+	cout<<"Les joueurs recoivent "<<piece_joueur<<" piece d or \n ";
 	cout<<"JOUEUR 1 : \n";
 	play(m_joueur1);
 	cout<<endl;
-	diedUnite(m_joueur1);
+	diedUnite(m_joueur2);
 	m_joueur1.creationSuperSoldat();
 	cout<<"Joueur 2 : \n";
 	play(m_joueur2);
-	diedUnite(m_joueur2);
+	diedUnite(m_joueur1);
 	m_joueur2.creationSuperSoldat();
 	cout<<"Etat du terrain  de jeux en fin de Tour \n";
+	upDateT();
 	printT();
 
 }
 
 void CAireJeux::diedUnite(CJoueur& joueur){
 
-    vector<Unite*> m_unite = joueur.getTableauxUnite();
-    int size = m_unite.size();
-	// boucle pour mettre les pointeurs à nulle
-	for(int i=0; i<size; i++){
-		if(m_unite[i]->getEtatUnit()==false){
+    vector<Unite*> unite=joueur.getTableauxUnite();
+	if(unite.empty()!=true){
 
-			modifieCase(m_unite[i]->getPosition(),0);
-			delete m_unite[i];
-			m_unite[i]=NULL;
+		for(int i=0;i<unite.size();i++){
+			if(unite[i]->getEtatUnit()==false){
+			modifieCase(unite[i]->getPosition(),0);
+			delete unite[i];
+			unite.erase(unite.begin()+i);
+
+			}
+
 		}
 
-	}
-	//boucle pour supprimer les unités dans le vecteur
-	for(vector<Unite*>::iterator it=m_unite.begin();it!=m_unite.end();it++){
 
-		if(*it==NULL){
-			cout<<"sortie des perso"<<endl;
-			m_unite.erase(it);//retire l'unité
-		}
-	}
-	if(m_unite.size()==0){//rien a faire
-            return;
-
-	}else if( m_unite[m_unite.size()-1]==NULL){
-
-            m_unite.erase(m_unite.end());
 	}
 }
 
@@ -183,10 +173,13 @@ bool CAireJeux::creerUnite_Pas(CJoueur& joueur){
 	if(joueur.getNumeroJoueur()==JOUEUR1)occupation=getOccupation(0);
 	if(joueur.getNumeroJoueur()==JOUEUR2)occupation=getOccupation(m_tailleT-1);
 	if(occupation==0){
-	srand(time(NULL));
+	//srand(time(NULL));
 	int tmp=rand()%2;
 	if(tmp==0)return true;
-	if(tmp==1)return false;
+	if(tmp==1){
+		cout<<"CHOISIT DE NE PAS CREER UNITE\n";
+		return false;
+		}
 	}
 	return false;
 }
@@ -204,12 +197,18 @@ void CAireJeux::action1(CJoueur& joueur){
 	for(int i=size; i>0; --i){
 		int position_ennemi=m_unite[i]->getPosEnnemiProche(m_t);
 		if(position_ennemi!=CODE_ERREUR){
-		if(position_ennemi==BASE){
-			if(m_unite[i]->getAttaquePossible()==true) m_unite[i]->print();
-		}
 		m_unite[i]->action(0,c.getUnitAt(position_ennemi));
-		cout<<"* ";
-		m_unite[i]->print();
+		if(position_ennemi==BASE){
+			if(m_unite[i]->getAttaquePossible()==true){
+                m_unite[i]->print();
+                cout<<"ATTAQUE BASE "<<endl;
+                if(joueur.getNumeroJoueur()==JOUEUR1)m_joueur2.oterPV(m_unite[i]->getpoint_dAttaque());
+                if(joueur.getNumeroJoueur()==JOUEUR2)m_joueur1.oterPV(m_unite[i]->getpoint_dAttaque());
+			}
+		}
+
+		//cout<<"* ";
+		//m_unite[i]->print();
 
 			}
 
@@ -228,17 +227,31 @@ void CAireJeux::action2(CJoueur& joueur){
 		if(num_j==JOUEUR1){
 		if(getOccupation(m_unite[i]->getPosition()+1)==0){
 			m_unite[i]->action(1,nullptr);
-		   cout<<"*  ";
+		   //cout<<"*  ";
             modifieCase(m_unite[i]->getPosition(),num_j);
-		   m_unite[i]->print();
+            //modifieCase(m_unite[i]->getPosition()-1,0);
+		  // m_unite[i]->print();
 
+			}else {
+			if(m_unite[i]->quelleType()==Ufantassin)cout<<"L UNITE FANTASSIN NE PEUT PAS AVANCER \n";
+			if(m_unite[i]->quelleType()==Ucatapulte)cout<<"L UNITE CATAPULTE NE PEUT PAS AVANCER \n";
+			if(m_unite[i]->quelleType()==Uarcher)cout<<"L UNITE ARCHER  NE PEUT PAS AVANCER \n";
+			if(m_unite[i]->quelleType()==USuperSoldat)cout<<"L UNITE SUPERSOLDAT NE PEUT PAS AVANCER \n";
 			}
-		}else{
+		}
+		else{
 			if(getOccupation(m_unite[i]->getPosition()-1)==0){
 			m_unite[i]->action(1,nullptr);
-		    cout<<"*  ";
+		    //cout<<"*  ";
             modifieCase(m_unite[i]->getPosition(),num_j);
-		    m_unite[i]->print();
+            modifieCase(m_unite[i]->getPosition()+1,0);
+		   // m_unite[i]->print();
+			}
+			else{
+			if(m_unite[i]->quelleType()==Ufantassin)cout<<"L UNITE FANTASSIN NE PEUT PAS AVANCER \n";
+			if(m_unite[i]->quelleType()==Ucatapulte)cout<<"L UNITE CATAPULTE NE PEUT PAS AVANCER \n";
+			if(m_unite[i]->quelleType()==Uarcher)cout<<"L UNITE ARCHER  NE PEUT PAS AVANCER \n";
+			if(m_unite[i]->quelleType()==USuperSoldat)cout<<"L UNITE SUPERSOLDAT NE PEUT PAS AVANCER \n";
 			}
 		}
 	}
@@ -252,20 +265,45 @@ void CAireJeux::action3(CJoueur& joueur){
     if(num_j==JOUEUR1) c=m_joueur2;
     else c=m_joueur1;
 	int size=m_unite.size()-1;
-	cout<<"------ Phase 1: action 1  ATTAQUER ------------------\n";
+	cout<<"------ Phase 3: action 3  ATTAQUER ------------------\n";
 	for(int i=size; i>0; --i){
 		int position_ennemi=m_unite[i]->getPosEnnemiProche(m_t);
 		if(position_ennemi!=CODE_ERREUR){
+		m_unite[i]->action(2,c.getUnitAt(position_ennemi));
 		if(position_ennemi==BASE){
 			if(m_unite[i]->getAttaquePossible()==true) m_unite[i]->print();
 		}
-		m_unite[i]->action(2,c.getUnitAt(position_ennemi));
-		cout<<"* ";
-        modifieCase(m_unite[i]->getPosition(),num_j);
-		m_unite[i]->print();
+
+		//cout<<"* ";
+       // modifieCase(m_unite[i]->getPosition(),num_j);
+		//m_unite[i]->print();
 
 
 			}
 
 	}
+}
+
+
+void CAireJeux::upDateT(){
+
+    vector<Unite*> unite=m_joueur1.getTableauxUnite();
+    vector<Unite*> unite1=m_joueur2.getTableauxUnite();
+    for(int i=0;i<unite.size();i++){
+
+        m_t[unite[i]->getPosition()]=1;
+
+    }
+    for(int i=0;i< unite1.size();i++){
+
+        m_t[unite1[i]->getPosition()]=2;
+
+    }
+    for(int i=0;i<m_tailleT;i++){
+
+    if(m_joueur1.getUnitAt(i)==m_joueur2.getUnitAt(i))m_t[i]=0;
+
+    }
+
+
 }

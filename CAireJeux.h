@@ -49,6 +49,8 @@ class CAireJeux{
 	void Run();
 	void Tour();
 
+	void upDateT();
+
 
 };
 
