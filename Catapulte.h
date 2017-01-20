@@ -14,6 +14,7 @@ class Catapulte : public Unite
         void action(int numAction,Unite* ennemie);
         static int getPrixUnite(){return prixUnite;}
         int getPosEnnemiProche(int plateau[]) ;
+        void print_avance();
     private:
         static int prixUnite;
         bool attaquer(Unite* ennemi);

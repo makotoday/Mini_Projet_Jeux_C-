@@ -8,6 +8,7 @@ SuperSoldat::SuperSoldat(int jr) : Fantassin(jr)
 SuperSoldat::~SuperSoldat()
 {
     //dtor
+    cout<<"Destruiction unite SUPERSOLDAT\n ";
 }
 
 void SuperSoldat::action(int numAction, Unite* ennemie)
@@ -26,4 +27,41 @@ void SuperSoldat::action(int numAction, Unite* ennemie)
             attaquer(ennemie);break;}
         //default : throw string("action inconnue pour le superSoldat");
     }
+}
+
+
+bool SuperSoldat::attaquer(Unite* ennemi)
+{
+    if(ennemi==NULL)//pas d'unité ennemi
+    {
+        if(peutAttaquerBase())
+        {
+            //enlever pv a la base
+            return true;
+        }
+        else return false;// rien à attaquer
+    }
+    if(valsAbsolue(position - ennemi->getPosition())<=porteeMax) //la distance avec l'ennemi doit etre <= à la portée
+    {
+        ennemi->setpoints_de_vie(ennemi->getpoints_de_vie() - this->point_dAttaque);
+        if(ennemi->getpoints_de_vie()<=0){
+			 ennemi->setMort();
+			 evolution=true;
+		 }
+		 cout<<"SuperSoldat "<<num_joueur<<" attaque ennemi\n";
+        cout<<"position : "<<position<<"\t\t\t position ennemi "<<ennemi->getPosition()<<endl;
+        cout<<"PV : "<<points_de_vie<<"\t\t\t PV ennemi : "<<ennemi->getpoints_de_vie()<<endl;
+
+        return true;
+    }
+    else return false;
+}
+
+
+
+
+void SuperSoldat::print_avance(){
+
+cout<<"Unite SuperSoldat avance \n";
+
 }

@@ -42,6 +42,7 @@ class Unite
         bool evolution;
         bool action3possible;
         //attaquer et avancer renvoient faux si l'unité n'a pas pu executer l'action
+        virtual void print_avance();
         virtual bool attaquer(Unite* ennemi) = 0 ;
         void avancer(int posEnnemi); //avancer est commun a toute les unités
         int valsAbsolue(int n) const{return (n >0 ? n : -n);}//calcul de la distance entre 2 unité

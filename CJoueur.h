@@ -53,7 +53,8 @@ class CJoueur {
 
 		CJoueur& operator=(const CJoueur& joueur);
 		void creationSuperSoldat();//la méthode permet de verifier si  on un soldat peut devenir un super soldat
-
+        void printProfile();// affiche  les informations simple et essentiel pour le joueur
+        void diedUnite();
 };
 
 #endif

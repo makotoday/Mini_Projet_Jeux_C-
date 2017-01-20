@@ -23,13 +23,20 @@ CAireJeux::~CAireJeux(){
 
 void CAireJeux::printT(){
 
+    for(int i =0; i<m_tailleT;i++){
+
+		cout<<"|"<<m_t[i]<<" |";
+
+	}
+	cout<<endl;
 	for(int i=0;i<m_tailleT;i++){
             //affichage : une case est soit vide, soit au joueur 1 , soit au joueur 2
             Unite* unite=m_joueur1.getUnitAt(i);
-			if(unite==NULL) {unite = m_joueur2.getUnitAt(i);if(unite==NULL){cout<<" | 0  | ";}}
+			if(unite==NULL)unite = m_joueur2.getUnitAt(i);
+			if(unite==NULL)cout<<" | 0  | ";
 
 			else{
-                     int num = unite->getNumJoueur();
+                int num = unite->getNumJoueur();
                 switch(unite->quelleType()){
                     case Uarcher :{
                     if(num==JOUEUR1)cout<<" | A1 | ";
@@ -56,6 +63,8 @@ void CAireJeux::printT(){
 
 	}
 	cout<<endl<<endl;
+	m_joueur1.printProfile();
+	m_joueur2.printProfile();
 
 }
 
@@ -98,7 +107,7 @@ void CAireJeux::Run(){
 		cin >> lu;
 		if(lu=='d')
 		tour++;
-		if(tour==20)fin_partie=true;
+		if(tour==30)fin_partie=true;
 	}
 
 
@@ -111,11 +120,11 @@ void CAireJeux::Tour(){
 	cout<<"JOUEUR 1 : \n";
 	play(m_joueur1);
 	cout<<endl;
-	diedUnite(m_joueur1);
+	diedUnite(m_joueur2);
 	m_joueur1.creationSuperSoldat();
 	cout<<"Joueur 2 : \n";
 	play(m_joueur2);
-	diedUnite(m_joueur2);
+	diedUnite(m_joueur1);
 	m_joueur2.creationSuperSoldat();
 	cout<<"Etat du terrain  de jeux en fin de Tour \n";
 	printT();
@@ -124,7 +133,7 @@ void CAireJeux::Tour(){
 
 void CAireJeux::diedUnite(CJoueur& joueur)
 {
-    vector<Unite*> m_unite = joueur.getTableauxUnite();
+  /*  vector<Unite*> m_unite = joueur.getTableauxUnite();
     if(m_unite.size()==0) return;//rien a faire
 	//boucle pour supprimer les unités dans le vecteur
 	int i =0;
@@ -137,7 +146,8 @@ void CAireJeux::diedUnite(CJoueur& joueur)
 			m_unite.erase(it);//retire l'unité
 		}
 		i++;
-	}
+	}*/
+	joueur.diedUnite();
 }
 
 void CAireJeux::play(CJoueur& joueur){
@@ -161,10 +171,13 @@ bool CAireJeux::creerUnite_Pas(CJoueur& joueur){
 	if(joueur.getNumeroJoueur()==JOUEUR1)occupation=getOccupation(0);
 	if(joueur.getNumeroJoueur()==JOUEUR2)occupation=getOccupation(m_tailleT-1);
 	if(occupation==0){
-	srand(time(NULL));
+	//srand(time(NULL));
 	int tmp=rand()%2;
 	if(tmp==0)return true;
-	if(tmp==1)return false;
+	if(tmp==1){
+	cout<<"Le Joueur a choisi de ne pas creer  d unite \n";
+	return false;
+	 }
 	}
 	return false;
 }
@@ -195,7 +208,7 @@ void CAireJeux::actions(int numAction, CJoueur& joueur){
         // l'affichage de la position sur le plateau de jeu
         if(num_j==JOUEUR1) modifieCase(m_unite[i]->getPosition() -1,0);
         else if(num_j==JOUEUR2) modifieCase(m_unite[i]->getPosition()+1,0);
-		m_unite[i]->print();
+		//m_unite[i]->print();
 
 	}
 

@@ -16,6 +16,7 @@ Archer::Archer(int joueur) : Unite(joueur)
 Archer::~Archer()
 {
     //dtor
+    cout<<"UNITE ARCHER DETRUITR \n";
 }
 
 void Archer::action(int numAction,Unite* ennemie)
@@ -25,7 +26,8 @@ void Archer::action(int numAction,Unite* ennemie)
     {
         case 0 : {
 
-                action3possible=attaquer(ennemie);break;
+                action3possible=attaquer(ennemie);
+                break;
             }
         case 1 : {//avancer
             if(ennemie==nullptr) avancer(AUCUN_ENNEMI);
@@ -57,8 +59,18 @@ bool Archer::attaquer(Unite* ennemi)
     {
         ennemi->setpoints_de_vie(ennemi->getpoints_de_vie() - this->point_dAttaque);
         if(ennemi->getpoints_de_vie()<=0) ennemi->setMort();
+        cout<<"Archer "<<num_joueur<<" attaque ennemi\n";
+        cout<<"position : "<<position<<"\t\t\t position ennemi "<<ennemi->getPosition()<<endl;
+        cout<<"PV : "<<points_de_vie<<"\t\t\t PV ennemi : "<<ennemi->getpoints_de_vie()<<endl;
         return true;
     }else return false;
 }
 
+
+
+void Archer::print_avance(){
+
+cout<<"Unite Archer avance \n";
+
+}
 

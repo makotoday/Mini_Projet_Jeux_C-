@@ -11,6 +11,7 @@ class Archer : public Unite
         void action(int numAction,Unite* ennemie);
         void print() const;
         static int getPrixUnite(){return prixUnite;}
+        void print_avance();
 
     protected:
     private:

@@ -11,6 +11,8 @@ class SuperSoldat : public Fantassin
         SuperSoldat(int jr);
         virtual ~SuperSoldat();
         void action(int numAction, Unite* ennemie);
+        bool attaquer(Unite* ennemi);
+        void print_avance();
     private:
 };
 

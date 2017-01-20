@@ -38,6 +38,7 @@ void Unite::avancer(int posEnnemi)
     {
         position--;
     }
+    print_avance();
 }
 
 bool Unite::peutAttaquerBase() const//pour un fantassin et un archer
@@ -69,5 +70,15 @@ bool Unite::peutAttaquerBase() const//pour un fantassin et un archer
 
 void Unite::oterPV(int pv){
 	points_de_vie=points_de_vie-pv;
+
+}
+
+
+
+
+
+void Unite::print_avance(){
+
+
 
 }

@@ -18,6 +18,7 @@ Fantassin::Fantassin(int joueur) : Unite(joueur)
 Fantassin::~Fantassin()
 {
     //dtor
+    cout<<"UNITE FANTASSIN DETRUIT\n";
 }
 
 void Fantassin::print() const
@@ -62,7 +63,17 @@ bool Fantassin::attaquer(Unite* ennemi)
 			 ennemi->setMort();
 			 evolution=true;
 		 }
+		 cout<<"Fantassin "<<num_joueur<<" attaque ennemi\n";
+        cout<<"position : "<<position<<"\t\t\t position ennemi "<<ennemi->getPosition()<<endl;
+        cout<<"PV : "<<points_de_vie<<"\t\t\t PV ennemi : "<<ennemi->getpoints_de_vie()<<endl;
         return true;
     }
     else return false;
 }
+
+void Fantassin::print_avance(){
+
+cout<<"Unite Fantassin avance \n";
+
+}
+

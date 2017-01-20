@@ -16,7 +16,7 @@ Catapulte::Catapulte(int joueur) :Unite(joueur)
 
 Catapulte::~Catapulte()
 {
-
+    cout<<"UNITE ACATAPULTE DETRUITE \n";
 }
 
 void Catapulte::print() const
@@ -65,6 +65,9 @@ bool Catapulte::attaquer(Unite* ennemi)
     {
         ennemi->setpoints_de_vie(ennemi->getpoints_de_vie()-point_dAttaque);
         if(ennemi->getpoints_de_vie()<=0) ennemi->setMort();
+        cout<<"Catapulte "<<num_joueur<<" attaque ennemi\n";
+        cout<<"position : "<<position<<"\t\t\tposition ennemi "<<ennemi->getPosition()<<endl;
+        cout<<"PV : "<<points_de_vie<<"\t\t\t PV ennemi : "<<ennemi->getpoints_de_vie()<<endl;
         return true;//attaque reussie
     }
     else return false;//ennemi trop loin ou trop pres
@@ -97,3 +100,12 @@ bool Catapulte::peutAttaquerBase() const
 	}
     else return CODE_ERREUR;
  }
+
+
+
+
+void Catapulte::print_avance(){
+
+cout<<"Unite Catapulte avance \n";
+
+}
