@@ -6,12 +6,11 @@ using namespace std;
 int Catapulte::prixUnite = 20;
 int Catapulte::porteeMin = 2;
 
-Catapulte::Catapulte(int joueur) :Unite(joueur)
+Catapulte::Catapulte(CJoueur& jr) :Unite(jr)
 {
     points_de_vie = 10;
-    point_dAttaque = 6;
+    point_dAttaque = 3;
     porteeMax = 3;//portée réelle de 4 car elle tire 4 cases plus loin en visant 3
-    type = Ucatapulte;
 }
 
 Catapulte::~Catapulte()
@@ -25,28 +24,28 @@ void Catapulte::print() const
     Unite::print();
 }
 
-void Catapulte::action(int numAction,Unite *ennemie)
+void Catapulte::action(int numAction, CAireJeux& aireJeu)
 {
     switch(numAction)
     {
         case 0 : {
                     //trouve l'ennemi 2 ou 3 cases plus loin :
-
+                    Unite* ennemiProche = trouveEnnemiProche(aireJeu);
                     //verifie si il est à portée puis attaque :
-                     action3possible = attaquer(ennemie);
+                     action3possible = attaquer(ennemiProche);
                      //attaque sur la case à coté (selon le joueur)
-                    /* if(m_num_joueur==1){
-                     action3possible += attaquer(ennemie);
-                     } else*/  action3possible += attaquer(ennemie);
+                     if(sonJoueur.getNumeroJoueur()==1){
+                     action3possible += attaquer(aireJeu.getUniteAt(position+1));
+                     } else  action3possible += attaquer(aireJeu.getUniteAt(position-1));
                      break;
                 }
         case 1 : break;// l'action 2 n'existe pas pour la catapulte
-        case 2 : {if(!action3possible) avancer();break;}
-       // default : throw string("action inconnue pour la catapulte");
+        case 2 : {if(action3possible) avancer(aireJeu);break;}
+        default : throw string("action inconnue pour la catapulte");
     }
 }
 
-bool Catapulte::attaquer(Unite* ennemi)
+bool Catapulte::attaquer(Unite* ennemi) const
 {
     if(ennemi==NULL)//pas d'unité ennemi
     {
@@ -57,14 +56,12 @@ bool Catapulte::attaquer(Unite* ennemi)
         }
         else return false;// rien à attaquer
     }
-    int distance = valsAbsolue(position-ennemi->getPosition());
+    Unite& ennemiProche = *ennemi;
+    int distance = valsAbsolue(position-ennemiProche.getPosition());
     if(distance >= porteeMin &&distance <=porteeMax)
     {
-        ennemi->setpoints_de_vie(ennemi->getpoints_de_vie()-point_dAttaque);
-        if(ennemi->getpoints_de_vie()<=0) ennemi->setMort();
-        cout<<"Catapulte "<<num_joueur<<" attaque ennemi\n";
-        cout<<"position : "<<position<<"\t position ennemi "<<ennemi->getPosition()<<endl;
-        cout<<"PV : "<<points_de_vie<<"\t PV ennemi : "<<ennemi->getpoints_de_vie()<<endl;
+        ennemiProche.setpoints_de_vie(ennemiProche.getpoints_de_vie()-point_dAttaque);
+        if(ennemiProche.getpoints_de_vie()<=0) ennemiProche.setMort();
         return true;//attaque reussie
     }
     else return false;//ennemi trop loin ou trop pres
@@ -73,35 +70,34 @@ bool Catapulte::attaquer(Unite* ennemi)
 bool Catapulte::peutAttaquerBase() const
 {
     //Comme il y a pas d'ennemi, la catapulte attaque la base seulement si elle est a portée de la base adverse
-
-    if(num_joueur==JOUEUR1 && (position+porteeMax >= 11 && position + porteeMin <=11 )) return true;
-     if(num_joueur==JOUEUR1 && (position-porteeMax <= 0 && position -porteeMin >=0 )) return true;
-	return false;
+    return (sonJoueur.getNumeroJoueur()==1&&(position+porteeMax >= 11 && position + porteeMin <=11 ))
+    || (sonJoueur.getNumeroJoueur()==2&&(position-porteeMax <= 0 && position - porteeMin >=0 ));
 }
 
-  int Catapulte::getPosEnnemiProche(int plateau[])
- {
-      int numero_ennemi = (num_joueur==JOUEUR1)? JOUEUR2 : JOUEUR1;
-	if(numero_ennemi==JOUEUR2){
-		for(int i=position+porteeMin;i<CASE_MAX-1;i++){//portee minimale pris en compte pour la catapulte
-
-			if(plateau[i]==numero_ennemi) return i;
-		}
-		return BASE;
-	}else if (numero_ennemi==JOUEUR1){
-		for(int i=position-1;i>0;i--){
-
-			if(plateau[i]==numero_ennemi) return i;
-			}
-			return BASE;
-	}
-    else return CODE_ERREUR;
- }
-
-
-
-void Catapulte::avancer(){
-
-Unite::avancer();
-cout<<"L UNITE CATAPULTE DU JOUEUR "<<num_joueur<<"  AVANCE \n";
+Unite* Catapulte::trouveEnnemiProche(CAireJeux& aireJeu)
+{
+     if(sonJoueur.getNumeroJoueur()==JOUEUR1)
+     {
+        for(int i = position+2;i <=11;i++)
+        {
+            if(aireJeu.getOccupation(i)==JOUEUR2)
+            {
+                return aireJeu.getUniteAt(i);
+            }
+        }
+        action3possible = true; //pas d'ennemi sur le plateau donc la catapulte avance
+        return NULL;
+    }
+    else
+    {
+        for(int i = position-2;i >=0;i--)
+        {
+            if(aireJeu.getOccupation(i)==JOUEUR1)
+            {
+                return aireJeu.getUniteAt(i);
+            }
+        }
+        action3possible = true;
+        return NULL;
+    }
 }

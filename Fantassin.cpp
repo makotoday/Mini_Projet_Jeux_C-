@@ -7,12 +7,11 @@ using namespace std;
 int Fantassin::prixUnite = 10;
 
 
-Fantassin::Fantassin(int joueur) : Unite(joueur)
+Fantassin::Fantassin(CJoueur& jr) : Unite(jr)
 {
     points_de_vie = 10;
     point_dAttaque = 4;
     porteeMax = 1;
-    type = Ufantassin;
 }
 
 Fantassin::~Fantassin()
@@ -27,23 +26,23 @@ void Fantassin::print() const
 }
 
 
-void Fantassin::action(int numAction,Unite* ennemie)
+void Fantassin::action(int numAction, CAireJeux& aireJeu)
 {
     switch(numAction)
     {
         case 0 : {
                 //action attaquer
-                //Unite* ennemiProche = trouveEnnemiProche(aireJeu);
-            action3possible = attaquer(ennemie);break;}
-        case 1 : avancer();break;
+                Unite* ennemiProche = trouveEnnemiProche(aireJeu);
+            action3possible = !attaquer(ennemiProche);break;}
+        case 1 : avancer(aireJeu);break;
         case 2 : {
-            Unite* ennemiProche = ennemie;
-            if(!action3possible&&ennemiProche!=NULL) attaquer(ennemiProche);cout<<"act3pos"<<endl;break;}
-        //default : throw string("action inconnue pour le fantassin");
+            Unite* ennemiProche = trouveEnnemiProche(aireJeu);
+            if(action3possible&&ennemiProche!=NULL) attaquer(ennemiProche);break;}
+        default : throw string("action inconnue pour le fantassin");
     }
 }
 
-bool Fantassin::attaquer(Unite* ennemi)
+bool Fantassin::attaquer(Unite* ennemi) const
 {
     if(ennemi==NULL)//pas d'unité ennemi
     {
@@ -54,27 +53,12 @@ bool Fantassin::attaquer(Unite* ennemi)
         }
         else return false;// rien à attaquer
     }
-    if(valsAbsolue(position - ennemi->getPosition())<=porteeMax) //la distance avec l'ennemi doit etre <= à la portée
+    Unite& ennemiProche = *ennemi;
+    if(valsAbsolue(position - ennemiProche.getPosition())<=porteeMax) //la distance avec l'ennemi doit etre <= à la portée
     {
-        ennemi->setpoints_de_vie(ennemi->getpoints_de_vie() - this->point_dAttaque);
-        if(ennemi->getpoints_de_vie()<=0){
-			 ennemi->setMort();
-			 evolution=true;
-		 }
-		 cout<<"Fantassin "<<num_joueur<<" attaque ennemi\n";
-        cout<<"position : "<<position<<"\t position ennemi "<<ennemi->getPosition()<<endl;
-        cout<<"PV : "<<points_de_vie<<"\t PV ennemi : "<<ennemi->getpoints_de_vie()<<endl;
+        ennemiProche.setpoints_de_vie(ennemiProche.getpoints_de_vie() - this->point_dAttaque);
+        if(ennemiProche.getpoints_de_vie()<=0) ennemiProche.setMort();
         return true;
     }
     else return false;
-}
-
-
-
-void Fantassin::avancer(){
-
-Unite::avancer();
-cout<<"L UNITE FANTASSIN DU JOUEUR "<<num_joueur<<"  AVANCE \n";
-
-
 }

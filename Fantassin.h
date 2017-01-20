@@ -7,15 +7,14 @@
 class Fantassin : public Unite
 {
     public:
-        Fantassin(int joueur);
+        Fantassin(CJoueur& jr);
         virtual ~Fantassin();
-           void action(int numAction,Unite* ennemie);
+           void action(int numAction, CAireJeux& aireJeu);
         void print() const;
         static int getPrixUnite(){return prixUnite;}
     protected :
-         bool attaquer(Unite* ennemi);
-        //bool action3possible;//vrai : l'action 3 est possible
-        void avancer();
+        virtual bool attaquer(Unite* ennemi) const;
+        bool action3possible;//vrai : l'action 3 est possible
     private:
         static int prixUnite;
 

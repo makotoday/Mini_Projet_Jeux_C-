@@ -1,18 +1,18 @@
 #include "Unite.h"
 #include <iostream>
-
+#include "CAireJeux.h"
 
 using namespace std;
 
 //int Unite::prixUnite;
 
-Unite::Unite(int joueur ): num_joueur(joueur), vivant(true)
+Unite::Unite(CJoueur& jr ): sonJoueur(jr), vivant(true)
 {
-if(num_joueur==JOUEUR1) position = 0;//case de la premeire base
-if(num_joueur==JOUEUR2) position = 11;//case de la seconde base
-//else throw string("ERREUR : mauvais numeroJoueur");
-evolution=false;
-action3possible=false;
+if(jr.getNumeroJoueur()==JOUEUR1)
+        position = 0;//case de la premeire base
+else if(jr.getNumeroJoueur()==JOUEUR2)
+    position = 11;//case de la seconde base
+else throw string("ERREUR : mauvais numeroJoueur");
 }
 
 Unite::~Unite()
@@ -29,13 +29,13 @@ void Unite::print() const
     cout << "position : " << position <<endl;
 }
 
-void Unite::avancer()
+void Unite::avancer(CAireJeux& aireJeu)
 {
     //verification que la case suivante est vide et selon le joueur avancer
-    if(num_joueur==JOUEUR1)
+    if(this->sonJoueur.getNumeroJoueur()==JOUEUR1&&aireJeu.getOccupation(position+1)==0)
     {
        position++;
-    }else if(num_joueur==JOUEUR2)
+    }else if(this->sonJoueur.getNumeroJoueur()==JOUEUR2&&aireJeu.getOccupation(position-1)==0)
     {
         position--;
     }
@@ -43,32 +43,32 @@ void Unite::avancer()
 
 bool Unite::peutAttaquerBase() const//pour un fantassin et un archer
 {
-	if(num_joueur==JOUEUR1 && position +porteeMax >= 11) return true;
-	if(num_joueur==JOUEUR1 && position +porteeMax <= 0) return true;
-	return false;
+    return ((sonJoueur.getNumeroJoueur()==1&&position+porteeMax >= 11)
+    || (sonJoueur.getNumeroJoueur()==2&& position-porteeMax <= 0 ));
 }
 
-
- int Unite::getPosEnnemiProche(int plateau[])
- {
-     int numero_ennemi = (num_joueur==JOUEUR1)? JOUEUR2 : JOUEUR1;//numero de l'ennemi
-	if(numero_ennemi==JOUEUR2){
-		for(int i=position+1;i<CASE_MAX-1;i++){
-
-			if(plateau[i]==numero_ennemi) return i;
-		}
-		return BASE;//i =11
-	}else if(numero_ennemi==JOUEUR1){
-		for(int i=position-1;i>0;i--){
-
-			if(plateau[i]==numero_ennemi) return i;
-			}
-            return BASE;//i = 0
-	}
-    else return CODE_ERREUR;
- }
-
-void Unite::oterPV(int pv){
-	points_de_vie=points_de_vie-pv;
-
+Unite* Unite::trouveEnnemiProche(CAireJeux& aireJeu)//pour un fantassin et un archer
+{
+    if(sonJoueur.getNumeroJoueur()==JOUEUR1)
+    {
+        for(int i = position+1;i <=11;i++)
+        {
+            if(aireJeu.getOccupation(i)==JOUEUR2)
+            {
+                return aireJeu.getUniteAt(i);
+            }
+        }
+        return NULL;
+    }
+    else
+    {
+        for(int i = position-1;i >=0;i--)
+        {
+            if(aireJeu.getOccupation(i)==JOUEUR1)
+            {
+                return aireJeu.getUniteAt(i);
+            }
+        }
+        return NULL;
+    }
 }
