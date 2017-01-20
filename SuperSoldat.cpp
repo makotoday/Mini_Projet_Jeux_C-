@@ -1,8 +1,8 @@
 #include "SuperSoldat.h"
 
-SuperSoldat::SuperSoldat(CJoueur& jr) : Fantassin(jr)
+SuperSoldat::SuperSoldat(int jr) : Fantassin(jr)
 {
-    //ctor
+    type = USuperSoldat;
 }
 
 SuperSoldat::~SuperSoldat()
@@ -10,19 +10,20 @@ SuperSoldat::~SuperSoldat()
     //dtor
 }
 
-void SuperSoldat::action(int numAction, CAireJeux& aireJeu)
+void SuperSoldat::action(int numAction, Unite* ennemie)
 {
     switch(numAction)
     {
         case 0 : {
                 //action attaquer
-            Unite* ennemiProche = trouveEnnemiProche(aireJeu);
-            action3possible = !attaquer(ennemiProche);break;}
-        case 1 : avancer(aireJeu);break;
+            action3possible = !attaquer(ennemie);break;}
+        case 1 :
+            if(ennemie==nullptr) avancer(AUCUN_ENNEMI);
+            else avancer(ennemie->getPosition());
+            break;
         case 2 : {
-            Unite* ennemiProche = trouveEnnemiProche(aireJeu);
             //action 3 toujours possible
-            attaquer(ennemiProche);break;}
-        default : throw string("action inconnue pour le superSoldat");
+            attaquer(ennemie);break;}
+        //default : throw string("action inconnue pour le superSoldat");
     }
 }
