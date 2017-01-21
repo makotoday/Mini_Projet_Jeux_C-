@@ -3,7 +3,8 @@
 
 #define JOUEUR1 1
 #define JOUEUR2 2
-#define BASE 200
+#define BASE1 0
+#define BASE2 11
 #define CODE_ERREUR 255
 #define CASE_MAX 12
 #define AUCUN_ENNEMI 260
@@ -33,6 +34,7 @@ class Unite
         bool getAttaquePossible()const{return action3possible;};
         virtual int getPosEnnemiProche(int plateau[]);// renvoie la position de l'ennemi proche qui peut etre attaqué
         int quelleType() const{return type;}//pour connaitre son type
+        bool AttaqueBase()const;
     protected :
         int type;
         int points_de_vie;

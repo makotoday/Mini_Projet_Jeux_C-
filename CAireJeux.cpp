@@ -88,7 +88,7 @@ void CAireJeux::Run(){
 
 	cout<<"--------------------------LANCEMENT DU JEUX ------------------------------------\n";
 	cout<<"Abreviation : \n";
-	cout<<" Le chiffre  represente  le joueur, 1 pour le joueur 1 et 2 pour le joueur 2.\n La lettre devant le chiffre represente l unite\n";
+	cout<<" Les chiffres  representes  les joueurs, 1 pour le JOUEUR 1 et 2 pour le JOUEUR 2.\n La lettre devant le chiffre represente le type d unite\n";
 	cout<<"Fantassin : F \t\t";
 	cout<<"Archer    : A \t\n";
 	cout<<"Catapulte : C \t\t";
@@ -116,16 +116,19 @@ void CAireJeux::Run(){
 
 
 void CAireJeux::Tour(){
-	cout<<"Les joueur recoivent "<<piece_joueur<<" d or \n ";
+	cout<<"Les joueurs recoivent "<<piece_joueur<<" d or \n ";
 	cout<<"JOUEUR 1 : \n";
 	play(m_joueur1);
-	cout<<endl;
 	diedUnite(m_joueur2);
 	m_joueur1.creationSuperSoldat();
+	UpDateT();
+	cout<<"Fin de tour Joueur 1 \n\n";
 	cout<<"Joueur 2 : \n";
 	play(m_joueur2);
 	diedUnite(m_joueur1);
 	m_joueur2.creationSuperSoldat();
+	UpDateT();
+	cout<<"Fin de tour du Joueur 2 \n\n";
 	cout<<"Etat du terrain  de jeux en fin de Tour \n";
 	printT();
 
@@ -166,7 +169,22 @@ void CAireJeux::play(CJoueur& joueur){
 }
 
 bool CAireJeux::creerUnite_Pas(CJoueur& joueur){
-    vector<Unite*> m_unite = joueur.getTableauxUnite();
+
+        int num_j=joueur.getNumeroJoueur();
+        Unite* unite;
+        if(num_j==JOUEUR1)unite=joueur.getUnitAt(0);
+        if(num_j==JOUEUR2)unite=joueur.getUnitAt(11);
+        if(unite==NULL){
+        int tmp=rand()%2;
+        if(tmp==0)return true;
+        if(tmp==1){
+        cout<<"Le joueur a choisi de ne pas creer d unite \n";
+        return false;
+        }
+        }else return false;
+        //return false;
+
+   /* vector<Unite*> m_unite = joueur.getTableauxUnite();
 	int occupation;
 	if(joueur.getNumeroJoueur()==JOUEUR1)occupation=getOccupation(0);
 	if(joueur.getNumeroJoueur()==JOUEUR2)occupation=getOccupation(m_tailleT-1);
@@ -175,11 +193,12 @@ bool CAireJeux::creerUnite_Pas(CJoueur& joueur){
 	int tmp=rand()%2;
 	if(tmp==0)return true;
 	if(tmp==1){
-	cout<<"Le Joueur a choisi de ne pas creer  d unite \n";
-	return false;
-	 }
+		cout<<"CHOISIT DE NE PAS CREER UNITE\n";
+		return false;
+		}
 	}
-	return false;
+	return false;*/
+
 }
 
 
@@ -200,16 +219,48 @@ void CAireJeux::actions(int numAction, CJoueur& joueur){
     }
 
 
-	for(int i=m_unite.size()-1; i>0; --i){
+	for(int i=m_unite.size()-1; i>=0; --i){
 		int position_ennemi = m_unite[i]->getPosEnnemiProche(m_t);
+		//cout<<"valeur de position ennemie "<<position_ennemi<<endl;
 		if(position_ennemi==CODE_ERREUR) m_unite[i]->action(numAction,nullptr);//aucun ennemi
-        else m_unite[i]->action(numAction,c.getUnitAt(position_ennemi));
+		if(m_unite[i]->AttaqueBase()){
+
+        c.oterPV(m_unite[i]->getpoint_dAttaque());
+        cout<<"Attaque de la base par l unite ";
+
+		}
+         else m_unite[i]->action(numAction,c.getUnitAt(position_ennemi));
         modifieCase(m_unite[i]->getPosition(),num_j);
         // l'affichage de la position sur le plateau de jeu
         if(num_j==JOUEUR1) modifieCase(m_unite[i]->getPosition() -1,0);
         else if(num_j==JOUEUR2) modifieCase(m_unite[i]->getPosition()+1,0);
+
 		//m_unite[i]->print();
 
 	}
+
+}
+
+
+void CAireJeux::UpDateT(){
+
+    vector<Unite*> unite=m_joueur1.getTableauxUnite();
+    vector<Unite*> unite1=m_joueur2.getTableauxUnite();
+    for(int i=0;i<unite.size();i++){
+
+        m_t[unite[i]->getPosition()]=1;
+
+    }
+    for(int i=0;i< unite1.size();i++){
+
+        m_t[unite1[i]->getPosition()]=2;
+
+    }
+    for(int i=0;i<m_tailleT;i++){
+
+    if(m_joueur1.getUnitAt(i)==m_joueur2.getUnitAt(i))m_t[i]=0;
+
+    }
+
 
 }

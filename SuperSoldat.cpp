@@ -8,7 +8,8 @@ SuperSoldat::SuperSoldat(int jr) : Fantassin(jr)
 SuperSoldat::~SuperSoldat()
 {
     //dtor
-    cout<<"Destruiction unite SUPERSOLDAT\n ";
+    if(num_joueur==JOUEUR1)cout<<"UNITE SUPERSOLDAT DETRUITE PAR LE JOUEUR 2 \n";
+    if(num_joueur==JOUEUR2)cout<<"UNITE SUPERSOLDAT DETRUITE PAR LE JOUEUR 1 \n";
 }
 
 void SuperSoldat::action(int numAction, Unite* ennemie)

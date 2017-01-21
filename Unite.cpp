@@ -57,13 +57,13 @@ bool Unite::peutAttaquerBase() const//pour un fantassin et un archer
 
 			if(plateau[i]==numero_ennemi) return i;
 		}
-		return BASE;//i =11
+		return BASE2;//i =11
 	}else if(numero_ennemi==JOUEUR1){
 		for(int i=position-1;i>0;i--){
 
 			if(plateau[i]==numero_ennemi) return i;
 			}
-            return BASE;//i = 0
+            return BASE1;//i = 0
 	}
     else return CODE_ERREUR;
  }
@@ -80,5 +80,14 @@ void Unite::oterPV(int pv){
 void Unite::print_avance(){
 
 
+
+}
+
+
+
+
+bool Unite::AttaqueBase()const{
+
+return peutAttaquerBase();
 
 }

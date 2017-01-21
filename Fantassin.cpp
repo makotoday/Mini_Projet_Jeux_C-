@@ -18,7 +18,8 @@ Fantassin::Fantassin(int joueur) : Unite(joueur)
 Fantassin::~Fantassin()
 {
     //dtor
-    cout<<"UNITE FANTASSIN DETRUIT\n";
+    if(num_joueur==JOUEUR1)cout<<"UNITE FANTASSIN DETRUITE PAR LE JOUEUR 2 \n";
+    if(num_joueur==JOUEUR2)cout<<"UNITE FANTASSIN DETRUITE PAR LE JOUEUR 1 \n";
 }
 
 void Fantassin::print() const
@@ -40,7 +41,7 @@ void Fantassin::action(int numAction,Unite* ennemie)
                     else avancer(ennemie->getPosition());break;
         case 2 : {
             Unite* ennemiProche = ennemie;
-            if(!action3possible&&ennemiProche!=NULL) attaquer(ennemiProche);cout<<"act3pos"<<endl;break;}
+            if(!action3possible&&ennemiProche!=NULL) attaquer(ennemiProche);/*cout<<"act3pos"<<endl*;*/break;}
         //default : throw string("action inconnue pour le fantassin");
     }
 }

@@ -16,7 +16,8 @@ Catapulte::Catapulte(int joueur) :Unite(joueur)
 
 Catapulte::~Catapulte()
 {
-    cout<<"UNITE ACATAPULTE DETRUITE \n";
+    if(num_joueur==JOUEUR1)cout<<"UNITE CATAPULTE DETRUITE PAR LE JOUEUR 2 \n";
+    if(num_joueur==JOUEUR2)cout<<"UNITE CATAPULTE DETRUITE PAR LE JOUEUR 1 \n";
 }
 
 void Catapulte::print() const
@@ -90,13 +91,13 @@ bool Catapulte::peutAttaquerBase() const
 
 			if(plateau[i]==numero_ennemi) return i;
 		}
-		return BASE;
+		return BASE2;
 	}else if (numero_ennemi==JOUEUR1){
 		for(int i=position-1;i>0;i--){
 
 			if(plateau[i]==numero_ennemi) return i;
 			}
-			return BASE;
+			return BASE1;
 	}
     else return CODE_ERREUR;
  }

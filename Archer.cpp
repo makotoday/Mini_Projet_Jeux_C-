@@ -16,7 +16,8 @@ Archer::Archer(int joueur) : Unite(joueur)
 Archer::~Archer()
 {
     //dtor
-    cout<<"UNITE ARCHER DETRUITR \n";
+    if(num_joueur==JOUEUR1)cout<<"UNITE ARCHER DETRUITE PAR LE JOUEUR 2 \n";
+    if(num_joueur==JOUEUR2)cout<<"UNITE ARCHER DETRUITE PAR LE JOUEUR 1 \n";
 }
 
 void Archer::action(int numAction,Unite* ennemie)
@@ -60,8 +61,10 @@ bool Archer::attaquer(Unite* ennemi)
         ennemi->setpoints_de_vie(ennemi->getpoints_de_vie() - this->point_dAttaque);
         if(ennemi->getpoints_de_vie()<=0) ennemi->setMort();
         cout<<"Archer "<<num_joueur<<" attaque ennemi\n";
+        cout<<"Dommage affligé par Archer: "<<point_dAttaque<<"point de  degat"<<endl;
         cout<<"position : "<<position<<"\t\t\t position ennemi "<<ennemi->getPosition()<<endl;
-        cout<<"PV : "<<points_de_vie<<"\t\t\t PV ennemi : "<<ennemi->getpoints_de_vie()<<endl;
+        cout<<"PV restant : "<<points_de_vie<<"\t\t\t PV ennemi restant : "<<ennemi->getpoints_de_vie()<<endl;
+
         return true;
     }else return false;
 }
